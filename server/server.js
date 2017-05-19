@@ -14,8 +14,6 @@ app.listen(port, () => {
 });
 
 app.post('/companies', (req, res) => {
-  console.log(req.body);
-
   let company = new Company({
     name: req.body.name,
     description: req.body.description,
@@ -25,7 +23,7 @@ app.post('/companies', (req, res) => {
   company.save().then((doc) => {
     res.status(201).send(doc);
   }, (err) => {
-    res.status(404).send(err);
+    res.status(400).send(err);
   });
 })
 app.get('/', (req, res) => {
@@ -36,3 +34,5 @@ process.on('exit', () => {
   console.log('Closing database connection.');
   mongoose.disconnect();
 });
+
+module.exports = { app };
