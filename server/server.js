@@ -1,31 +1,50 @@
 const express = require('express');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
-const { mongoose } = require('./db/mongoose')
-const { Company } = require('./models/company')
+const { mongoose } = require('./db/mongoose');
+const { Company } = require('./models/company');
 
 const port = process.env.PORT || 3000;
 
 const app = express();
 app.use('/static', express.static('public'));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.listen(port, () => {
   console.log(`Started listening on port ${port}`);
 });
 
 app.post('/companies', (req, res) => {
-  let company = new Company({
+  let newCompany = new Company({
     name: req.body.name,
     description: req.body.description,
     url: req.body.url
   });
 
-  company.save().then((doc) => {
-    res.status(201).send(doc);
+  newCompany.save().then((company) => {
+    res.status(201).send(company);
   }, (err) => {
     res.status(400).send(err);
   });
-})
+});
+
+app.get('/companies', (req, res) => {
+  Company.find().then((companies) => {
+    res.status(200).send({ companies });
+  }).catch((e) => res.send(404))
+});
+
+app.get('/companies/:id', (req, res) => {
+  let companyId = req.params.id;
+
+  Company.findById(companyId).then((company) => {
+    if (!company) {
+      res.status(404).send();
+    }
+
+    res.status(200).send({ company });
+  }).catch((e) => res.send(400))
+});
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });

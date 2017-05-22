@@ -1,6 +1,9 @@
 module.exports = {
     "extends": "standard",
     "installedESLint": true,
+    "rules": {
+        "semi": "always"
+    },
     "plugins": [
         "standard",
         "promise"

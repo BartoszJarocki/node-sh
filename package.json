@@ -1,6 +1,12 @@
 {
   "name": "node-sh",
   "version": "1.0.0",
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true
+    }
+  },
   "main": "./server/server.js",
   "scripts": {
     "test": "mocha server/**/*.test.js",
@@ -11,6 +17,7 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.2",
+    "mongodb": "^2.2.27",
     "mongoose": "^4.9.10"
   },
   "devDependencies": {
