@@ -1,3 +1,4 @@
+const config = require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { ObjectID } = require('mongodb');
@@ -6,9 +7,9 @@ const _ = require('lodash');
 const { mongoose } = require('./db/mongoose');
 const { Company } = require('./models/company');
 
-const port = process.env.PORT || 3000;
-
+const port = process.env.PORT
 const app = express();
+
 app.use('/static', express.static('public'));
 app.use(bodyParser.json());
 app.listen(port, () => {
@@ -75,7 +76,7 @@ app.patch('/api/v1/companies/:id', (req, res) => {
   }
 
   let body = _.pick(req.body, ['name', 'description', 'url']);
-  
+
   Company.findByIdAndUpdate(companyId, { $set: body }, { new: true }).then((company) => {
     if (!company) {
       res.status(404).send();

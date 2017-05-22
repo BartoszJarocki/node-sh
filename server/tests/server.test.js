@@ -46,7 +46,7 @@ describe('POST /api/v1/companies', () => {
       .send({ name, description, url })
       .expect(201)
       .expect((res) => {
-        expect(res.body).toInclude({ name, description, url })
+        expect(res.body).toContain({ name, description, url })
       })
       .end((err, res) => {
         if (err) return done(err);
@@ -90,7 +90,7 @@ describe('GET /api/v1/companies', () => {
       })
       .end(done);
   });
-})
+});
 
 describe('GET /api/v1/companies/:id', () => {
   it('should fetch company with given id', (done) => {
@@ -139,7 +139,7 @@ describe('GET /api/v1/companies/:id', () => {
         }).catch((e) => done(e));
       });
   });
-})
+});
 
 describe('DELETE /api/v1/companies/:id', () => {
   it('should remove company with given id', (done) => {
@@ -176,6 +176,51 @@ describe('DELETE /api/v1/companies/:id', () => {
 
     request(app)
       .delete(`/api/v1/companies/${incorrectId}`)
+      .expect(400)
+      .end(done);
+  })
+});
+
+describe('PATCH /api/v1/companies/:id', () => {
+  it('should update company with given id', (done) => {
+    let hexId = testCompanies[0]._id.toHexString();
+
+    let name = 'Updated name';
+    let description = 'Updated desc';
+    let url = 'Updated url';
+
+    request(app)
+      .patch(`/api/v1/companies/${hexId}`)
+      .send({ name, description, url })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.company).toContain({ name, description, url });
+      })
+      .end((err, res) => {
+        if (err) return done(err);
+
+        Company.findById(hexId).then((company) => {
+          expect(company).toContain({ name, description, url });
+
+          done();
+        }).catch((e) => done(e));
+      });
+  });
+
+  it('should return 404 if company with given id not found', (done) => {
+    let hexId = new ObjectID().toHexString();
+
+    request(app)
+      .patch(`/api/v1/companies/${hexId}`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 400 when id is not correct', (done) => {
+    let incorrectId = 'incorrectId'
+
+    request(app)
+      .patch(`/api/v1/companies/${incorrectId}`)
       .expect(400)
       .end(done);
   })
