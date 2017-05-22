@@ -9,8 +9,12 @@
   },
   "main": "./server/server.js",
   "scripts": {
+    "start": "node server/server.js",
     "test": "mocha server/**/*.test.js",
     "test-watch": "nodemon --exec 'yarn test'"
+  },
+  "engines": {
+    "node": "7.8.0"
   },
   "author": "Bartosz Jarocki",
   "license": "MIT",

@@ -30,7 +30,7 @@ app.post('/companies', (req, res) => {
 app.get('/companies', (req, res) => {
   Company.find().then((companies) => {
     res.status(200).send({ companies });
-  }).catch((e) => res.send(404))
+  }).catch((e) => res.status(404).send())
 });
 
 app.get('/companies/:id', (req, res) => {
@@ -42,7 +42,7 @@ app.get('/companies/:id', (req, res) => {
     }
 
     res.status(200).send({ company });
-  }).catch((e) => res.send(400))
+  }).catch((e) => res.status(400).send())
 });
 
 app.get('/', (req, res) => {

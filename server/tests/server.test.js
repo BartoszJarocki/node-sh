@@ -99,5 +99,23 @@ describe('GET /companies', () => {
         expect(res.body.company).toInclude(testCompanies[0]);
       })
       .end(done);
+  });
+
+  it('should return 404 when company with given id not found', (done) => {
+    let hexId = new ObjectID().toHexString();
+
+    request(app)
+      .get(`/companies/${hexId}`)
+      .expect(404)
+      .end(done);
+  });
+
+  it('should return 400 when id is not correct', (done) => {
+    let incorrectId = 'incorrectId'
+
+    request(app)
+      .get(`/companies/${incorrectId}`)
+      .expect(400)
+      .end(done);
   })
 })
